@@ -1,40 +1,71 @@
 "use client";
-import type { Filter } from "@/hooks/useTodos";
+
+export type Filter = "all" | "active" | "completed";
 
 export default function Filters({
-  value, onChange, remaining, onClearCompleted, hasCompleted,
+  filter,
+  setFilter,
+  clearCompleted,
+  remaining,
+  hasCompleted,
 }: {
-  value: Filter;
-  onChange: (f: Filter) => void;
+  filter: Filter;
+  setFilter: (f: Filter) => void;
+  clearCompleted: () => void;
   remaining: number;
-  onClearCompleted: () => void;
   hasCompleted: boolean;
 }) {
-  const btn = (f: Filter, label: string) => (
+  const Btn = ({ f, label }: { f: Filter; label: string }) => (
     <button
-      key={f}
-      onClick={() => onChange(f)}
-      className={`rounded-lg border px-3 py-2 text-sm ${value === f ? "bg-black text-white" : ""}`}
+      type="button"
+      onClick={() => setFilter(f)}
+      style={{
+        padding: "6px 10px",
+        borderRadius: 6,
+        border: "1px solid " + (filter === f ? "#9ca3af" : "#e5e7eb"),
+        background: filter === f ? "#f3f4f6" : "white",
+        cursor: "pointer",
+        marginRight: 8,
+        marginBottom: 8,
+      }}
+      aria-pressed={filter === f}
     >
       {label}
     </button>
   );
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <div className="flex gap-2">
-        {btn("all", "All")}
-        {btn("active", "Active")}
-        {btn("completed", "Completed")}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: 8,
+      }}
+    >
+      <div>
+        <Btn f="all" label="All" />
+        <Btn f="active" label="Active" />
+        <Btn f="completed" label="Completed" />
       </div>
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-600">
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <span style={{ fontSize: 13, color: "#6b7280" }}>
           {remaining} {remaining === 1 ? "item" : "items"} left
         </span>
         <button
-          onClick={onClearCompleted}
+          type="button"
+          onClick={clearCompleted}
           disabled={!hasCompleted}
-          className="rounded-lg border px-3 py-2 text-sm disabled:opacity-40"
+          style={{
+            padding: "6px 10px",
+            borderRadius: 6,
+            border: "1px solid #e5e7eb",
+            background: "white",
+            cursor: hasCompleted ? "pointer" : "not-allowed",
+            opacity: hasCompleted ? 1 : 0.5,
+          }}
         >
           Clear completed
         </button>

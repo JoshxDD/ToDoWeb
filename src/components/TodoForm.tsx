@@ -1,38 +1,51 @@
 "use client";
+
 import { useState } from "react";
 
 export default function TodoForm({
-  onAdd, onToggleAll, hasTodos, allDone,
+  addTodo,
 }: {
-  onAdd: (text: string) => void;
-  onToggleAll: () => void;
-  hasTodos: boolean;
-  allDone: boolean;
+  addTodo: (text: string) => void;
 }) {
   const [text, setText] = useState("");
-  const submit = () => {
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     const v = text.trim();
     if (!v) return;
-    onAdd(v);
+    addTodo(v);
     setText("");
   };
+
   return (
-    <div className="flex gap-2">
-      {hasTodos && (
-        <button onClick={onToggleAll} className="rounded border px-3 py-2 text-sm">
-          {allDone ? "Uncheck all" : "Check all"}
-        </button>
-      )}
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", gap: 8, marginBottom: 12 }}
+    >
       <input
         value={text}
-        onChange={e => setText(e.target.value)}
-        onKeyDown={e => e.key === "Enter" && submit()}
-        placeholder="Add a task and press Enter"
-        className="flex-1 rounded border px-3 py-2"
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Add a task…"
+        style={{
+          flex: 1,
+          padding: "8px",
+          border: "1px solid #d1d5db",
+          borderRadius: 6,
+        }}
       />
-      <button onClick={submit} className="rounded bg-black px-3 py-2 text-sm text-white">
+      <button
+        type="submit"
+        style={{
+          padding: "8px 14px",
+          background: "#374151",
+          color: "white",
+          border: "1px solid #374151",
+          borderRadius: 6,
+          cursor: "pointer",
+        }}
+      >
         Add
       </button>
-    </div>
+    </form>
   );
 }
