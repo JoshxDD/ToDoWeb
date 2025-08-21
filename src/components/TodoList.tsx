@@ -19,7 +19,7 @@ export default function TodoList({
   if (!todos || todos.length === 0) {
     return (
       <p style={{ color: "#6b7280", textAlign: "center", marginTop: 12 }}>
-        No todos yet. Add one above 👆
+        No todos yet. Add one above 
       </p>
     );
   }
